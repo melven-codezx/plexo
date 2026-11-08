@@ -14,6 +14,7 @@
 ![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-Material%203-4285F4?logo=jetpackcompose&logoColor=white)
 ![Tamanho](https://img.shields.io/badge/APK-1.2%20MB-brightgreen)
 ![Preço](https://img.shields.io/badge/sem%20an%C3%BAncios-sem%20contas-7C5CFF)
+[![CI](https://github.com/melven-codezx/plexo/actions/workflows/android.yml/badge.svg)](https://github.com/melven-codezx/plexo/actions/workflows/android.yml)
 
 </div>
 
@@ -54,6 +55,11 @@ O Android não tem API pública para "abrir dois apps em ecrã dividido". O Plex
 O modo **Flutuante** tenta `ActivityOptions.setLaunchBounds()` para duas janelas livres.
 
 > O teste `EndToEndTest` imprime a estratégia realmente usada em cada build, na CI.
+
+## Descarregar
+
+O APK assinado está em [`assets/dist/Plexo-1.0.0-release.apk`](assets/dist/Plexo-1.0.0-release.apk)
+(1,19 MB) ou nos artefactos da última execução da CI (`plexo-release-apk`).
 
 ## Compilar
 
