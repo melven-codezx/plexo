@@ -12,6 +12,7 @@
 ![Android](https://img.shields.io/badge/Android-8.0%2B%20(API%2026)-3DDC84?logo=android&logoColor=white)
 ![Kotlin](https://img.shields.io/badge/Kotlin-2.0-7F52FF?logo=kotlin&logoColor=white)
 ![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-Material%203-4285F4?logo=jetpackcompose&logoColor=white)
+![Versão](https://img.shields.io/badge/vers%C3%A3o-1.1.0-7C5CFF)
 ![Tamanho](https://img.shields.io/badge/APK-1.2%20MB-brightgreen)
 ![Preço](https://img.shields.io/badge/sem%20an%C3%BAncios-sem%20contas-7C5CFF)
 [![CI](https://github.com/melven-codezx/plexo/actions/workflows/android.yml/badge.svg)](https://github.com/melven-codezx/plexo/actions/workflows/android.yml)
@@ -29,6 +30,17 @@ escolhes duas apps, guardas o par com um nome, e a partir daí é um toque.
 | Ecrã principal | Seletor de apps | Guardar par |
 |---|---|---|
 | ![Home](docs/screenshots/01-home.png) | ![Seletor](docs/screenshots/02-seletor.png) | ![Diálogo](docs/screenshots/03-dialogo.png) |
+
+## ⚠️ Ativação (1 passo, uma única vez)
+
+O Android 12+ **ignora** pedidos de ecrã dividido vindos de apps normais. Por isso o Plexo
+inclui um serviço de acessibilidade que aciona a divisão do sistema — o mesmo mecanismo das
+apps de referência da Play Store.
+
+**Abra o Plexo → “Ativar agora” → Acessibilidade → Plexo → ligar.** O selo
+“Ecrã dividido real ativo” confirma que está pronto.
+
+O serviço está configurado com `canRetrieveWindowContent=false`: não lê conteúdo de janelas.
 
 ## Funcionalidades
 
@@ -48,6 +60,7 @@ O Android não tem API pública para "abrir dois apps em ecrã dividido". O Plex
 
 | # | Estratégia | Mecanismo | Onde funciona |
 |---|---|---|---|
+| 0 | `A11Y_SPLIT` ⭐ | Serviço de acessibilidade: abre A → `GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN` → abre B com `LAUNCH_ADJACENT` | **Android 8–15 (fiável no 12+)** |
 | 1 | `PAIR_WINDOWING` | `startActivities([A, B])` com `ActivityOptions` a pedir `WINDOWING_MODE_SPLIT_SCREEN_PRIMARY` + `splitScreenCreateMode=TOP_OR_LEFT` | Android 8+ (maioria dos fabricantes) |
 | 2 | `ADJACENT` | `startActivities` com `FLAG_ACTIVITY_LAUNCH_ADJACENT` em ambas as intenções | Android 7+, ecrã já dividido |
 | 3 | `SEQUENTIAL` | Abre A e B em sequência (750 ms) e deixa-os prontos nos recentes | Todos, como rede de segurança |
@@ -58,7 +71,7 @@ O modo **Flutuante** tenta `ActivityOptions.setLaunchBounds()` para duas janelas
 
 ## Descarregar
 
-O APK assinado está em [`assets/dist/Plexo-1.0.0-release.apk`](assets/dist/Plexo-1.0.0-release.apk)
+O APK assinado está em [`assets/dist/Plexo-1.1.0-release.apk`](assets/dist/Plexo-1.1.0-release.apk)
 (1,19 MB) ou nos artefactos da última execução da CI (`plexo-release-apk`).
 
 ## Compilar
@@ -91,7 +104,8 @@ compila, testa e publica os APKs como artefactos.
 | `PairCodecTest` | serialização, texto corrompido, nomes | 4 ✅ |
 | `SplitLauncherTest` | intenções, extras, fallback amigável | 4 ✅ |
 | `EndToEndTest` | motor com activities reais, persistência, widget | 3 ✅ |
-| `UiRenderTest` | render Compose + capturas de ecrã (Robolectric) | 3 ✅ |
+| `UiRenderTest` | render Compose + capturas de ecrã (Robolectric) | 4 ✅ |
+| `AccessibilitySplitTest` | deteção do serviço, rotas e mensagens | 4 ✅ |
 
 As capturas em `docs/screenshots/` são **geradas pelos próprios testes**, não são mockups.
 

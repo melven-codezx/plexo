@@ -2,7 +2,7 @@
 
 <img src="icone-512.png" width="110" alt="Plexo"/>
 
-# Plexo 1.0.0
+# Plexo 1.1.0
 
 ### Dois apps. Um ecrã.
 
@@ -12,61 +12,77 @@
 
 ---
 
+## ⚠️ Leia primeiro: o passo que faz a divisão funcionar
+
+A versão 1.0 abria **só uma app em ecrã inteiro**. Motivo: desde o **Android 12**, o sistema
+ignore deliberadamente os pedidos de ecrã dividido feitos por apps normais — nenhuma app
+consegue dividir o ecrã sem ajuda do sistema.
+
+A v1.1.0 resolve isso com um **serviço de acessibilidade** (o mesmo mecanismo usado pelas
+apps de referência da Play Store). É um passo único:
+
+1. Abra o Plexo → toque em **“Ativar agora”** no cartão *“Falta 1 passo para dividir o ecrã”*.
+2. Vai abrir **Definições → Acessibilidade**. Toque em **Plexo — Ecrã dividido**.
+3. Ative o interruptor e confirme em **Permitir**.
+4. Volte ao Plexo. Deve aparecer o selo verde **“Ecrã dividido real ativo”**.
+
+Depois disso, o botão **“Abrir em simultâneo”** divide mesmo o ecrã.
+
+> **Privacidade:** o serviço está configurado com `canRetrieveWindowContent=false` — o Plexo
+> **não lê** o conteúdo das janelas, não vê o que escreve e não recolhe dados. Só usa duas
+> coisas: a ação do sistema “dividir ecrã” e a lista de janelas (para saber se o divisor já
+> apareceu). Pode desligar quando quiser nas mesmas definições.
+
 ## O que está nesta pasta
 
 | Ficheiro | Para quê |
 |---|---|
-| **`Plexo-1.0.0-release.apk`** (1,19 MB) | **A app.** Versão otimizada (R8), assinada. Instale esta. |
-| `Plexo-1.0.0-debug.apk` (16 MB) | Versão de desenvolvimento, com ferramentas de diagnóstico. |
-| `capturas/` | Capturas reais do app (geradas automaticamente pelos testes). |
+| **`Plexo-1.1.0-release.apk`** (1,19 MB) | **A app.** Otimizada (R8) e assinada. Instale esta. |
+| `Plexo-1.1.0-debug.apk` (16 MB) | Versão de desenvolvimento. |
+| `capturas/` | Capturas reais do app (geradas pelos testes automáticos). |
 | `icone-512.png` | Ícone 512×512 para a Play Store. |
 | `feature-graphic-1024x500.png` | Imagem de destaque da ficha da Play Store. |
 
 **SHA-256 do release:**
 ```
-5236004611d6a27ae492f06cfb54204489d7d8bf6ec724d193c65138a0125ddf
+eabbaf63d8f16968e1846fa19b76d757c301fd71471cb5c3af4b32e3b8d624c2
 ```
 
 ## Como instalar
 
-1. Copie `Plexo-1.0.0-release.apk` para o telemóvel (cabo USB, Bluetooth, Google Drive…).
-2. Abra o ficheiro no telemóvel. O Android vai pedir para permitir instalação de
-   "origens desconhecidas" — ative para a app de ficheiros que estiver a usar.
-3. Toque em **Instalar**. Abra o **Plexo**.
+1. Copie `Plexo-1.1.0-release.apk` para o telemóvel.
+2. Abra o ficheiro → permita “instalar de origens desconhecidas” para a app de ficheiros.
+3. Toque em **Instalar** → abra o **Plexo** → siga o passo de ativação acima.
 
-> Requisitos: **Android 8.0 ou superior** (API 26+). Não pede nenhuma permissão
-> sensível, não tem internet, não tem anúncios.
+> Requisitos: **Android 8.0+** (API 26). Sem internet, sem anúncios, sem contas.
 
 ## Como usar
 
-1. Toque na **janela de cima** → escolha a primeira app (pode pesquisar).
-2. Toque na **janela de baixo** → escolha a segunda app.
-3. Escolha o modo: **Ecrã dividido** ou **Flutuante**.
-4. Toque em **"Abrir em simultâneo"** — as duas apps abrem lado a lado.
-5. Opcional: **"Guardar par"** para abrir mais tarde com um toque.
+1. **Ative o serviço** (uma única vez, ver acima).
+2. Toque na **janela de cima** → escolha a app.
+3. Toque na **janela de baixo** → escolha a segunda app.
+4. Toque em **“Abrir em simultâneo”** — a app de cima abre, o ecrã divide-se e a de baixo
+   entra na metade livre.
+5. Opcional: **“Guardar par”** para repetir com um toque. Há também **widget 2×2** e
+   **tile nos ajustes rápidos**.
 
-**Extra:** mantenha o ecrã inicial premido → *Widgets* → **Plexo**, para abrir o último
-par direto do ambiente de trabalho. Também há um atalho nos **ajustes rápidos**.
+## Se ainda não dividir
 
-## Se o ecrã dividido não abrir
+Cada fabricante muda o comportamento. Se o ecrã não dividir depois de ativar o serviço,
+envie-me:
 
-O Android não permite a nenhuma app forçar o ecrã dividido em todos os telemóveis.
-O Plexo tenta três métodos por ordem e, se o fabricante bloquear, abre as duas apps
-em sequência — depois basta arrastar uma para o topo nos recentes.
+- **modelo do telemóvel** e **versão do Android** (Definições → Acerca do telefone);
+- se o selo **“Ecrã dividido real ativo”** fica verde;
+- o que acontece: divide e fecha? divide e mostra a app errada? não faz nada?
 
-Se acontecer sempre, diga-me o **modelo do telemóvel e a versão do Android** e eu
-afino o motor de lançamento para esse fabricante.
+Com esses dados afino os tempos e a ordem das ações para o seu aparelho — o serviço já tem
+margem para isso (espera pelo divisor, tempo de acomodação e nova tentativa).
 
 ## Código-fonte
 
-Repositório público: **https://github.com/melven-codezx/plexo**
-
-- Kotlin + Jetpack Compose (Material 3)
-- 14 testes automáticos, 100% verdes
-- Compilação contínua no GitHub Actions (workflow `Android CI`)
-- Ficha pronta para a Play Store em `docs/PLAY-STORE.md`
+**https://github.com/melven-codezx/plexo** — Kotlin + Jetpack Compose, 19 testes
+automáticos, compilação contínua no GitHub Actions.
 
 ## Chave de assinatura
 
-Para publicar atualizações, use sempre o mesmo keystore (`plexo-release.jks`).
-Credenciais e instruções em `SIGNING.txt` na raiz do projeto.
+Mesmo keystore da v1.0 (`plexo-release.jks`); credenciais em `SIGNING.txt`.
