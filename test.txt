@@ -1,2 +1,0 @@
-linha1	tab
-linha2 \n escape
