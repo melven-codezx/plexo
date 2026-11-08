@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Plexo</string>
+    <string name="tile_label">Plexo</string>
+    <string name="app_tagline">Dois apps. Um ecrã.</string>
+    <string name="widget_description">Abre o último par de apps em ecrã dividido com um toque.</string>
+    <string name="widget_empty_title">Plexo</string>
+    <string name="widget_empty_sub">Toque para criar um par</string>
+    <string name="widget_icon_desc">Ícone de app</string>
+    <string name="widget_open">Abrir Plexo</string>
+</resources>

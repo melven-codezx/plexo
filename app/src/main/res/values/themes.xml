@@ -1,0 +1,22 @@
+<resources>
+    <style name="Theme.Plexo" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/plexo_bg</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowActivityTransitions">true</item>
+    </style>
+
+    <style name="Theme.Plexo.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/plexo_bg</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash_logo</item>
+        <item name="postSplashScreenTheme">@style/Theme.Plexo</item>
+    </style>
+
+    <style name="Theme.Plexo.Transparent" parent="@android:style/Theme.Translucent.NoTitleBar">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowAnimationStyle">@null</item>
+    </style>
+</resources>

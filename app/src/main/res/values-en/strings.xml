@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Plexo</string>
+    <string name="tile_label">Plexo</string>
+    <string name="app_tagline">Two apps. One screen.</string>
+    <string name="widget_description">Open your last app pair in split screen with one tap.</string>
+    <string name="widget_empty_title">Plexo</string>
+    <string name="widget_empty_sub">Tap to create a pair</string>
+    <string name="widget_icon_desc">App icon</string>
+    <string name="widget_open">Open Plexo</string>
+</resources>
