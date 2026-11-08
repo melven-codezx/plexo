@@ -10,8 +10,16 @@ import android.os.Build
 /**
  * Motor de lancamento do Plexo.
  *
- * O Android nao expoe uma API publica "abre dois apps em ecra dividido", por isso o Plexo
- * usa tres estrategias em cascata, da mais elegante para a mais compativel:
+ * O Android nao expoe uma API publica "abre dois apps em ecra dividido". Desde o Android 12
+ * o sistema IGNORA o pedido de windowing mode vindo de apps normais (resultado: a ultima app
+ * abria em ecra inteiro). Por isso a via principal e o servico de acessibilidade, que tem
+ * permissao para acionar o botao "ecra dividido" do sistema.
+ *
+ *  0. A11Y_SPLIT - servico de acessibilidade ligado: abre A, aciona
+ *     GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN e lanca B em FLAG_ACTIVITY_LAUNCH_ADJACENT.
+ *     E o unico metodo que funciona de forma fiavel em Android 12/13/14.
+ *
+ * Depois, como alternativa/compatibilidade, tres estrategias em cascata:
  *
  *  1. PAIR_WINDOWING - startActivities([A, B]) com um ActivityOptions que pede
  *     explicitamente WINDOWING_MODE_SPLIT_SCREEN_PRIMARY + splitScreenCreateMode TOP_OR_LEFT.
@@ -45,7 +53,7 @@ object SplitLauncher {
         val mode: LaunchMode
     )
 
-    enum class Strategy { PAIR_WINDOWING, ADJACENT, SEQUENTIAL, FLOATING }
+    enum class Strategy { A11Y_SPLIT, PAIR_WINDOWING, ADJACENT, SEQUENTIAL, FLOATING }
 
     data class Result(
         val strategy: Strategy?,
@@ -66,6 +74,23 @@ object SplitLauncher {
 
         val errors = StringBuilder()
 
+        // 0) Via principal: servico de acessibilidade (funciona em Android 12+).
+        if (request.mode == LaunchMode.SPLIT) {
+            val service = PlexoAccessibilityService.instance
+            if (service != null) {
+                runCatching {
+                    service.launchPair(request.pkgA, request.actA, request.pkgB, request.actB)
+                }.onSuccess {
+                    return Result(
+                        Strategy.A11Y_SPLIT, true,
+                        "Ecrã dividido a abrir: ${shortLabel(request.pkgA)} em cima, ${shortLabel(request.pkgB)} em baixo."
+                    )
+                }.onFailure {
+                    errors.appendLine("A11Y_SPLIT: ${it.javaClass.simpleName}")
+                }
+            }
+        }
+
         if (request.mode == LaunchMode.FLOATING) {
             runCatching { launchFreeform(context, rawA, rawB) }
                 .onSuccess { return Result(Strategy.FLOATING, true, "Duas janelas flutuantes abertas.") }
@@ -85,7 +110,10 @@ object SplitLauncher {
                 clone(rawA).apply { flags = PIN_FLAGS or Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED }
             )
         }.map {
-            Result(Strategy.SEQUENTIAL, true, "Apps abertas. Arraste uma para o topo para dividir o ecrã.")
+            Result(
+                Strategy.SEQUENTIAL, true,
+                "Este aparelho não aceitou o ecrã dividido automático. Apps abertas; ative o modo \u201cEcrã dividido real\u201d no Plexo."
+            )
         }.getOrElse {
             errors.appendLine("SEQUENTIAL: ${it.javaClass.simpleName}")
             Result(null, false, "Não foi possível abrir. ${errors.toString().trim()}")
@@ -144,6 +172,12 @@ object SplitLauncher {
         }?.takeIf { it.resolveActivity(pm) != null }
         return explicit ?: pm.getLaunchIntentForPackage(pkg)
     }
+
+    /** Nome curto do pacote, para mensagens legiveis. */
+    private fun shortLabel(pkg: String): String = pkg.substringAfterLast('.').replaceFirstChar { it.uppercase() }
+
+    /** true quando o caminho fiável (acessibilidade) esta disponivel. */
+    fun hasReliableSplit(context: Context): Boolean = PlexoAccessibilityService.isConnected
 
     /** Intencao usada pelos atalhos, widget e tile. */
     fun launchIntentFor(context: Context, request: Request): Intent =

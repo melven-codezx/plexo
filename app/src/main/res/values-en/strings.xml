@@ -7,4 +7,7 @@
     <string name="widget_empty_sub">Tap to create a pair</string>
     <string name="widget_icon_desc">App icon</string>
     <string name="widget_open">Open Plexo</string>
+    <string name="a11y_service_label">Plexo — Split screen</string>
+    <string name="a11y_service_summary">Lets Plexo split the screen and open both apps automatically.</string>
+    <string name="a11y_service_description">Plexo uses this service only to trigger the system split-screen action (the same one as the Recents button) and place the second app in the free half. It does not read window content, does not observe what you type and collects no data. You can turn it off at any time in accessibility settings.</string>
 </resources>

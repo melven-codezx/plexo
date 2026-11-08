@@ -7,4 +7,7 @@
     <string name="widget_empty_sub">Toque para criar um par</string>
     <string name="widget_icon_desc">Ícone de app</string>
     <string name="widget_open">Abrir Plexo</string>
+    <string name="a11y_service_label">Plexo — Ecrã dividido</string>
+    <string name="a11y_service_summary">Permite ao Plexo dividir o ecrã e abrir as duas apps automaticamente.</string>
+    <string name="a11y_service_description">O Plexo usa este serviço apenas para acionar a divisão de ecrã do sistema (a mesma ação do botão \"Ecrã dividido\" dos recentes) e colocar a segunda app na metade livre. Não lê o conteúdo das janelas, não observa o que escreve e não recolhe dados. Pode desativar a qualquer momento nas definições de acessibilidade.</string>
 </resources>

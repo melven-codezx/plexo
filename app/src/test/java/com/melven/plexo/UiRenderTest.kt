@@ -106,6 +106,20 @@ class UiRenderTest {
     }
 
     @Test
+    fun cartaoDeAtivacaoRenderiza() {
+        com.melven.plexo.ui.Motion.reduceMotion = true
+        compose.activity.setContent {
+            PlexoTheme {
+                androidx.compose.foundation.layout.Column {
+                    com.melven.plexo.ui.SplitPermissionCard(enabled = false, onActivate = {}, onHelp = {})
+                    com.melven.plexo.ui.SplitPermissionCard(enabled = true, onActivate = {}, onHelp = {})
+                }
+            }
+        }
+        capture("04-ativacao")
+    }
+
+    @Test
     fun dialogoDeGuardarRenderiza() {
         com.melven.plexo.ui.Motion.reduceMotion = true
         compose.activity.setContent {

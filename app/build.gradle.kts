@@ -12,8 +12,8 @@ android {
         applicationId = "com.melven.plexo"
         minSdk = 26
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0.0"
+        versionCode = 2
+        versionName = "1.1.0"
         vectorDrawables { useSupportLibrary = true }
         resourceConfigurations += listOf("pt", "en")
     }

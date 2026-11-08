@@ -60,6 +60,15 @@ import com.melven.plexo.ui.theme.PlexoColors
  */
 @Composable
 fun PlexoRoot(vm: HomeViewModel = viewModel()) {
+    val lifecycle = androidx.lifecycle.compose.LocalLifecycleOwner.current.lifecycle
+    androidx.compose.runtime.DisposableEffect(lifecycle) {
+        val observer = androidx.lifecycle.LifecycleEventObserver { _, event ->
+            if (event == androidx.lifecycle.Lifecycle.Event.ON_RESUME) vm.refreshSplitState()
+        }
+        lifecycle.addObserver(observer)
+        onDispose { lifecycle.removeObserver(observer) }
+    }
+
     var showPickerFor by remember { mutableStateOf<Int?>(null) }
     var showSaveDialog by remember { mutableStateOf(false) }
     var confirmDelete by remember { mutableStateOf<Pair?>(null) }
@@ -75,7 +84,13 @@ fun PlexoRoot(vm: HomeViewModel = viewModel()) {
         ) {
             Spacer(Modifier.height(14.dp))
             TopBar()
-            Spacer(Modifier.height(22.dp))
+            Spacer(Modifier.height(18.dp))
+            SplitPermissionCard(
+                enabled = vm.splitReady,
+                onActivate = vm::activateSplit,
+                onHelp = vm::explainSplit
+            )
+            Spacer(Modifier.height(16.dp))
             HeroTitle()
             Spacer(Modifier.height(20.dp))
             StageCard(

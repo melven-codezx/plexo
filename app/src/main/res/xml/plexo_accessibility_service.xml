@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Configuração do serviço de acessibilidade do Plexo.
+
+  Privacidade: canRetrieveWindowContent=false (o Plexo NÃO lê o conteúdo das janelas),
+  sem toque exploratório e sem filtro de eventos de conteúdo — apenas ações globais e
+  a lista de janelas, para saber se o divisor de ecrã dividido está presente.
+-->
+<accessibility-service xmlns:android="http://schemas.android.com/apk/res/android"
+    android:accessibilityEventTypes="typeWindowsChanged"
+    android:accessibilityFeedbackType="feedbackGeneric"
+    android:accessibilityFlags="flagDefault"
+    android:canRetrieveWindowContent="false"
+    android:description="@string/a11y_service_description"
+    android:notificationTimeout="100"
+    android:settingsActivity="com.melven.plexo.MainActivity" />

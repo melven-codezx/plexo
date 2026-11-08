@@ -37,15 +37,37 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     var message by mutableStateOf<UiMessage?>(null)
         private set
 
+    /** true quando o servico de acessibilidade (ecra dividido real) esta ligado. */
+    var splitReady by mutableStateOf(false)
+        private set
+
     data class UiMessage(val text: String, val isError: Boolean = false)
 
     init {
+        refreshSplitState()
         refreshCatalog()
         val selection = store.selection()
         pkgA = selection.pkgA.takeIf { catalog.isInstalled(it) }
         pkgB = selection.pkgB.takeIf { catalog.isInstalled(it) }
         mode = selection.mode
         pairs = store.pairs()
+    }
+
+    /** Rele o estado do servico (o utilizador liga/desliga nas definicoes do sistema). */
+    fun refreshSplitState() {
+        splitReady = com.melven.plexo.launch.AccessibilityHelper.isEnabled(app)
+    }
+
+    fun activateSplit() {
+        com.melven.plexo.launch.AccessibilityHelper.openSettings(app)
+        message = UiMessage("Ligue \u201cPlexo\u201d na lista de acessibilidade e volte atras.")
+    }
+
+    fun explainSplit() {
+        message = UiMessage(
+            "Ajustes \u2192 Acessibilidade \u2192 Plexo \u2192 Ativar. E a mesma acao do botao " +
+                "\u201cEcra dividido\u201d dos recentes, agora automatica."
+        )
     }
 
     fun refreshCatalog() {
@@ -119,7 +141,8 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
             mode = launchMode
         )
         val result = SplitLauncher.launch(app, request)
-        message = UiMessage(result.message, isError = !result.ok)
+        val exigeServico = result.strategy == com.melven.plexo.launch.SplitLauncher.Strategy.SEQUENTIAL
+        message = UiMessage(result.message, isError = !result.ok || exigeServico)
         if (result.ok && setAsLastUsed != null) {
             com.melven.plexo.widget.PlexoWidgetProvider.refresh(app)
         }
