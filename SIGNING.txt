@@ -1,0 +1,21 @@
+PLEXO — ASSINATURA DE RELEASE
+================================
+Ficheiro do keystore : /home/user/plexo-signing/plexo-release.jks  (guarde este ficheiro!)
+Alias                : plexo
+Password do keystore : Plexo2026!
+Password da chave    : Plexo2026!
+Validade             : 10 000 dias (RSA 4096)
+Fingerprint SHA-256  : 96:8D:5C:61:F9:C2:D2:22:32:07:AF:EA:B5:2E:9F:95:9F:45:F7:25:77:34:91:D9:AD:12:74:9A:15:D7:EE:21
+
+Como reassinar um build local:
+  export RELEASE_KEYSTORE_PATH=/caminho/plexo-release.jks
+  export RELEASE_KEYSTORE_PASSWORD='Plexo2026!'
+  export RELEASE_KEY_ALIAS=plexo
+  export RELEASE_KEY_PASSWORD='Plexo2026!'
+  ./gradlew :app:assembleRelease
+
+Na CI (GitHub Secrets):
+  KEYSTORE_BASE64  = base64 -w0 plexo-release.jks
+  KEYSTORE_PASSWORD = Plexo2026!
+  KEY_ALIAS        = plexo
+  KEY_PASSWORD     = Plexo2026!
